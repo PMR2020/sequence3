@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.ec.app.R
@@ -25,7 +26,8 @@ class MainActivity : AppCompatActivity(), ItemAdapter.ActionListener {
         }
     )
     private val adapter = newAdapter()
-    private val dataProvider = DataProvider(this)
+
+    private val dataProvider by lazy { DataProvider(this.application) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

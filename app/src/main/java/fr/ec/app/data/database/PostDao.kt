@@ -1,49 +1,17 @@
 package fr.ec.app.data.database
 
-import android.content.Context
-import android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import fr.ec.app.data.model.Post
-import fr.ec.app.data.model.toContentValues
 
-class PostDao(context: Context) {
+@Dao
+interface PostDao {
 
-    private val productHuntDbHelper = ProductHuntDbHelper(context)
+    @Query("SELECT * FROM post ")
+    suspend fun getPosts(): List<Post>
 
-    fun save(post: Post): Long {
-        return productHuntDbHelper.writableDatabase
-            .insertWithOnConflict(
-                DataBaseContract.PostTable.TABLE_NAME,
-                null,
-                post.toContentValues(),
-                CONFLICT_REPLACE
-            )
-    }
-
-    fun retrievePosts(): List<Post> {
-        val cursor = productHuntDbHelper.readableDatabase
-            .query(
-                DataBaseContract.PostTable.TABLE_NAME,
-                DataBaseContract.PostTable.PROJECTIONS,
-                null,
-                null,
-                null,
-                null,
-                null
-            )
-        val posts: MutableList<Post> = mutableListOf()
-        if (cursor.moveToFirst()) {
-            do {
-                val post = Post(
-                    cursor.getLong(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3)
-                )
-                posts.add(post)
-            } while (cursor.moveToNext())
-        }
-        cursor.close()
-        return posts
-    }
-
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun save(posts: List<Post>)
 }
