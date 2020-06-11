@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.ec.app.R
 import fr.ec.app.data.DataProvider
-import fr.ec.app.data.api.model.PostResponse
 import fr.ec.app.data.model.Post
 import fr.ec.app.ui.main.adapter.ItemAdapter
 import kotlinx.coroutines.*
@@ -26,6 +25,8 @@ class MainActivity : AppCompatActivity(), ItemAdapter.ActionListener {
         }
     )
     private val adapter = newAdapter()
+    private val dataProvider = DataProvider(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -49,9 +50,8 @@ class MainActivity : AppCompatActivity(), ItemAdapter.ActionListener {
             list.visibility = View.GONE
 
             // main
-
             runCatching {
-                DataProvider.getPostFromApi()
+                dataProvider.getPosts()
             }.fold(
                 onSuccess = { posts ->
                     // main

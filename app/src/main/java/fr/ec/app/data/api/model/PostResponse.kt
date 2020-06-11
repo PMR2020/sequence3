@@ -3,6 +3,8 @@ package fr.ec.app.data.api.model
 import com.google.gson.annotations.SerializedName
 
 data class PostResponse(
+    @SerializedName("id")
+    val id : Long,
     @SerializedName("name")
     val title: String,
     @SerializedName("tagline")
