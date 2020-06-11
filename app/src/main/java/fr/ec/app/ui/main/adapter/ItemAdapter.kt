@@ -4,9 +4,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import fr.ec.app.R
+import fr.ec.app.data.api.model.PostResponse
 import fr.ec.app.data.model.Post
 
 class ItemAdapter(
@@ -25,7 +28,7 @@ class ItemAdapter(
         }
     }
 
-    fun showData(newDataSet : List<Post>) {
+    fun showData(newDataSet: List<Post>) {
         dataSet.clear()
         dataSet.addAll(newDataSet)
         notifyDataSetChanged()
@@ -66,6 +69,7 @@ class ItemAdapter(
         private val title: TextView = itemView.findViewById(
             R.id.title
         )
+        private val imageView: ImageView = itemView.findViewById(R.id.image)
 
         init {
 
@@ -81,6 +85,7 @@ class ItemAdapter(
 
         fun bind(post: Post) {
             title.text = "${post.title} & ${post.subTitle}"
+            Picasso.get().load(post.imageUrl).into(imageView)
         }
 
 
@@ -90,6 +95,8 @@ class ItemAdapter(
         private val title: TextView = itemView.findViewById(
             R.id.title
         )
+        private val imageView: ImageView = itemView.findViewById(R.id.image)
+
         private val subTitle: TextView = itemView.findViewById(R.id.subTitle)
 
         init {
@@ -107,6 +114,8 @@ class ItemAdapter(
         fun bind(post: Post) {
             title.text = post.title
             subTitle.text = post.subTitle
+            Picasso.get().load(post.imageUrl).into(imageView)
+
         }
     }
 

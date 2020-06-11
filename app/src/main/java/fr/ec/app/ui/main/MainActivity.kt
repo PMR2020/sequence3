@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.ec.app.R
 import fr.ec.app.data.DataProvider
+import fr.ec.app.data.api.model.PostResponse
 import fr.ec.app.data.model.Post
 import fr.ec.app.ui.main.adapter.ItemAdapter
 import kotlinx.coroutines.*
+import java.io.IOException
 
 class MainActivity : AppCompatActivity(), ItemAdapter.ActionListener {
 
@@ -47,11 +49,27 @@ class MainActivity : AppCompatActivity(), ItemAdapter.ActionListener {
             list.visibility = View.GONE
 
             // main
-            val posts = DataProvider.getPostFromApi()
-            // main
-            adapter.showData(posts)
-            progress.visibility = View.GONE
-            list.visibility = View.VISIBLE
+
+            runCatching {
+                DataProvider.getPostFromApi()
+            }.fold(
+                onSuccess = { posts ->
+                    // main
+                    adapter.showData(posts)
+                    progress.visibility = View.GONE
+                    list.visibility = View.VISIBLE
+                },
+                onFailure = {
+                    if(it is IOException){
+                        progress.visibility = View.GONE
+                        // errorView.text = "Erreur"
+
+                    }
+                    Log.e("MainActivity", "get Post from Api fail > ${it.message}")
+
+                }
+            )
+
 
         }
 

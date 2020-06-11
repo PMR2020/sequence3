@@ -1,6 +1,6 @@
 package fr.ec.app.data.api
 
-import fr.ec.app.data.model.PostsResponse
+import fr.ec.app.data.api.model.PostsResponse
 import retrofit2.http.GET
 
 
